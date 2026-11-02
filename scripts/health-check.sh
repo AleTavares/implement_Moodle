@@ -51,7 +51,7 @@ check_health() {
 
     # Verificação (a): HTTP 200 na URL raiz
     local http_root
-    http_root=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "${URL}" || true)
+    http_root=$(curl -L -s -o /dev/null -w "%{http_code}" --max-time 10 "${URL}" || true)
     if [[ "$http_root" != "200" ]]; then
         FAILED_CHECK="raiz"
         log_failure "Verificação (a) falhou: URL raiz retornou HTTP ${http_root} (esperado 200)"
@@ -60,7 +60,7 @@ check_health() {
 
     # Verificação (b): HTTP 200 em /login/index.php
     local http_login
-    http_login=$(curl -f -s -o /dev/null -w "%{http_code}" --max-time 10 \
+    http_login=$(curl -L -f -s -o /dev/null -w "%{http_code}" --max-time 10 \
         --retry 3 --retry-delay 5 "${URL}/login/index.php" || true)
     if [[ "$http_login" != "200" ]]; then
         FAILED_CHECK="login"
@@ -70,7 +70,7 @@ check_health() {
 
     # Verificação (c): presença da string "Moodle" no corpo da URL raiz
     local body
-    body=$(curl -s --max-time 10 "${URL}" || true)
+    body=$(curl -L -s --max-time 10 "${URL}" || true)
     if ! echo "$body" | grep -qi "moodle"; then
         FAILED_CHECK="conteudo"
         log_failure "Verificação (c) falhou: string 'Moodle' não encontrada no corpo da resposta"

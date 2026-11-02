@@ -6,12 +6,12 @@
 > **Critério eliminatório:** A ausência do arquivo `docs/architecture-design.md` no repositório entregue
 > pelo aluno resulta em **desclassificação automática**, independentemente da pontuação nas demais categorias.
 
----
+
 
 ## Tabela Resumo de Pontuação
 
 | # | Categoria | Peso |
-|---|---|:---:|
+|||::|
 | 1 | Ambiente Docker local funcionando (`docker compose up`) | 20 pts |
 | 2 | Infraestrutura Terraform completa e aplicável | 35 pts |
 | 3 | Pipelines CI/CD funcionando | 15 pts |
@@ -19,18 +19,18 @@
 | 5 | Boas práticas de segurança | 10 pts |
 | | **Total** | **100 pts** |
 
----
+
 
 ## Níveis de Desempenho
 
 | Nível | Faixa de Pontuação | Descrição |
-|---|:---:|---|
+||::||
 | **Insuficiente** | 0–39 pts | Entregáveis principais ausentes ou não funcionais; não demonstra compreensão mínima dos conceitos. |
 | **Básico** | 40–59 pts | Alguns entregáveis presentes, mas com lacunas significativas de funcionalidade ou qualidade. |
 | **Proficiente** | 60–79 pts | Maioria dos entregáveis funcional com pequenas falhas; demonstra domínio adequado dos conceitos. |
 | **Avançado** | 80–100 pts | Todos os entregáveis funcionais e completos; demonstra domínio sólido e boas práticas aplicadas. |
 
----
+
 
 ## Critérios Detalhados
 
@@ -46,7 +46,7 @@
 4. Aguarde até 5 minutos e verifique o acesso em `http://localhost:8080`.
 
 | Critério | Pontuação |
-|---|:---:|
+||::|
 | O arquivo `docker-compose.yml` está presente e é sintaticamente válido (`docker compose config --quiet` sem erros) | 4 pts |
 | Todos os contêineres atingem o estado `running` após `docker compose up -d` | 6 pts |
 | A URL `http://localhost:8080` retorna HTTP 200 com a interface do Moodle | 6 pts |
@@ -56,13 +56,13 @@
 #### Níveis por faixa
 
 | Nível | Faixa | Indicador |
-|---|:---:|---|
+||::||
 | Insuficiente | 0–5 pts | `docker-compose.yml` ausente ou com erros de sintaxe; contêineres não sobem |
 | Básico | 6–11 pts | Contêineres sobem mas Moodle não responde em `http://localhost:8080` |
 | Proficiente | 12–16 pts | Moodle acessível, mas sem persistência de dados ou com configurações padrão quebradas |
 | Avançado | 17–20 pts | Stack completo funcionando com persistência confirmada |
 
----
+
 
 ### Categoria 2 — Infraestrutura Terraform (35 pts)
 
@@ -78,7 +78,7 @@
 4. Se possível, execute `terraform apply` e verifique os recursos criados no console AWS.
 
 | Critério | Pontuação |
-|---|:---:|
+||::|
 | Os três módulos (`networking`, `compute`, `database`) possuem os arquivos `main.tf`, `variables.tf` e `outputs.tf` preenchidos (sem stubs vazios) | 5 pts |
 | `terraform validate` passa sem erros | 5 pts |
 | Módulo `networking`: VPC, subnets pública e privadas (mín. 2 AZs), IGW, route table e security groups corretos | 7 pts |
@@ -90,13 +90,13 @@
 #### Níveis por faixa
 
 | Nível | Faixa | Indicador |
-|---|:---:|---|
+||::||
 | Insuficiente | 0–9 pts | Módulos com stubs não preenchidos; `terraform validate` falha |
 | Básico | 10–18 pts | Um ou dois módulos implementados; `terraform validate` passa mas `terraform apply` falha |
 | Proficiente | 19–27 pts | Todos os módulos implementados; infraestrutura criada com pequenos erros de configuração |
 | Avançado | 28–35 pts | Infraestrutura criada com sucesso; Moodle acessível via DNS público da EC2 |
 
----
+
 
 ### Categoria 3 — Pipelines CI/CD (15 pts)
 
@@ -109,7 +109,7 @@
 3. Para `terraform-plan.yml` e `health-check.yml`, execute manualmente via `workflow_dispatch`.
 
 | Critério | Pontuação |
-|---|:---:|
+||::|
 | Workflow `terraform-validate.yml` executa em push/PR para `main` e passa (`terraform fmt -check` + `terraform validate`) | 5 pts |
 | Workflow `docker-lint.yml` executa em push/PR para `main` e `hadolint` não reporta erros no `Dockerfile` | 4 pts |
 | Workflow `terraform-plan.yml` implementado pelo aluno com `workflow_dispatch` e executa `terraform plan` com sucesso (requer secrets configurados) | 4 pts |
@@ -119,13 +119,13 @@
 #### Níveis por faixa
 
 | Nível | Faixa | Indicador |
-|---|:---:|---|
+||::||
 | Insuficiente | 0–4 pts | Workflows ausentes ou sem nenhuma execução bem-sucedida |
 | Básico | 5–8 pts | Apenas `terraform-validate.yml` ou `docker-lint.yml` funcionando |
 | Proficiente | 9–12 pts | Três dos quatro workflows funcionando corretamente |
 | Avançado | 13–15 pts | Todos os quatro workflows executados e aprovados |
 
----
+
 
 ### Categoria 4 — Documentação de Arquitetura (20 pts)
 
@@ -139,7 +139,7 @@
 2. Leia cada seção e verifique o preenchimento conforme os critérios abaixo.
 
 | Critério | Pontuação |
-|---|:---:|
+||::|
 | Arquivo `docs/architecture-design.md` presente no repositório (critério eliminatório) | 4 pts |
 | Diagrama de arquitetura cobrindo: VPC, subnets públicas e privadas, EC2, RDS, security groups e fluxo Internet → IGW → EC2 → RDS | 6 pts |
 | Seção "Decisões de Design" preenchida com justificativas técnicas reais (não apenas os valores do template) | 4 pts |
@@ -150,13 +150,13 @@
 #### Níveis por faixa
 
 | Nível | Faixa | Indicador |
-|---|:---:|---|
+||::||
 | Insuficiente | 0 pts | Arquivo `docs/architecture-design.md` ausente — desclassificação |
 | Básico | 4–8 pts | Arquivo presente mas com `<!-- TODO: -->` não preenchidos; diagrama ausente ou incompleto |
 | Proficiente | 9–15 pts | Todas as seções preenchidas, diagrama presente mas com componentes faltando |
 | Avançado | 16–20 pts | Todas as seções completas, diagrama cobre todos os componentes obrigatórios, custo com link da calculadora |
 
----
+
 
 ### Categoria 5 — Boas Práticas de Segurança (10 pts)
 
@@ -170,7 +170,7 @@
 4. Verifique se arquivos sensíveis (`.env`, `*.tfvars`, `*.pem`) não foram commitados.
 
 | Critério | Pontuação |
-|---|:---:|
+||::|
 | Nenhuma credencial (senhas, tokens, access keys) exposta em texto literal em arquivos commitados | 4 pts |
 | Security group do RDS com acesso restrito ao security group da EC2 (não `0.0.0.0/0`) | 2 pts |
 | Variável `ssh_allowed_cidr` restrita a um CIDR específico (não `0.0.0.0/0`) ou acompanhada de comentário de aviso | 2 pts |
@@ -180,13 +180,13 @@
 #### Níveis por faixa
 
 | Nível | Faixa | Indicador |
-|---|:---:|---|
+||::||
 | Insuficiente | 0–2 pts | Credenciais expostas em commits ou security groups totalmente abertos |
 | Básico | 3–5 pts | Credenciais não expostas, mas security groups sem restrição adequada |
 | Proficiente | 6–8 pts | Segurança adequada com pequenas falhas (ex.: `ssh_allowed_cidr` = `0.0.0.0/0` sem aviso) |
 | Avançado | 9–10 pts | Todos os critérios de segurança atendidos |
 
----
+
 
 ## Checklist Rápido para o Avaliador
 
@@ -199,7 +199,7 @@ Use esta lista antes de iniciar a correção detalhada:
 - [ ] Nenhuma credencial em texto literal foi encontrada em commits (`git log --all -S "password"`)
 - [ ] Os workflows do GitHub Actions têm histórico de execuções na aba Actions
 
----
+
 
 ## Referências
 
