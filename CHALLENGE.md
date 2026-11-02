@@ -13,7 +13,7 @@ O desafio combina dois mundos: **validação local em contêineres** e **provisi
 
 ## Contexto
 
-Este desafio é parte de uma disciplina universitária e usa o **AWS Learn Lab** (AWS Academy) como ambiente de nuvem educacional. O Learn Lab fornece **credenciais temporárias** (válidas por aproximadamente 4 horas) e tem permissões restritas: não permite criar IAM roles ou usuários, nem utilizar Route 53, ACM (Certificate Manager) ou CloudFront. Essas restrições moldam toda a solução de infraestrutura — veja a seção [Restrições do AWS Learn Lab](#restrições-do-aws-learn-lab).
+Este desafio é parte da Disciplina de DevOPS no Curso de ADS da UniFAAT e usa o **AWS Learn Lab** (AWS Academy) como ambiente de nuvem educacional. O Learn Lab fornece **credenciais temporárias** (válidas por aproximadamente 4 horas) e tem permissões restritas: não permite criar IAM roles ou usuários, nem utilizar Route 53, ACM (Certificate Manager) ou CloudFront. Essas restrições moldam toda a solução de infraestrutura — veja a seção [Restrições do AWS Learn Lab](#restrições-do-aws-learn-lab).
 
 O **Moodle** é um LMS (Learning Management System) de código aberto. Aqui usamos a versão **4.1+** rodando em contêiner. A instalação local (Docker) serve como base de estudo e validação antes do deploy na nuvem; a instalação em nuvem (EC2 + RDS) demonstra o provisionamento via Terraform.
 
