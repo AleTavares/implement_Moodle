@@ -1,0 +1,59 @@
+# Este workflow roda automaticamente em pushes e pull requests que modifiquem
+# arquivos dentro do diretório terraform/. Ele valida a sintaxe e a formatação
+# do código Terraform para garantir qualidade antes do merge.
+
+name: Terraform Validate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+
+jobs:
+  terraform-validate:
+    name: Validate Terraform
+    runs-on: ubuntu-latest
+    # Só executa se o arquivo terraform/versions.tf existir, pois os alunos
+    # precisam criar o diretório terraform/ como parte do desafio.
+    if: ${{ hashFiles('terraform/versions.tf') != '' }}
+
+    steps:
+      # Faz o checkout do repositório para que o runner tenha acesso ao código
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      # Instala o Terraform CLI no runner usando a action oficial da HashiCorp
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # Inicializa o diretório de trabalho do Terraform sem configurar backend.
+      # Use -backend=false para evitar erros em ambientes sem backend configurado
+      # (como o AWS Learn Lab dos alunos que ainda não criaram o bucket S3).
+      # TODO: Quando você configurar um backend remoto (backend.tf), remova
+      #       a flag -backend=false e ajuste o working-directory abaixo conforme
+      #       a raiz do seu projeto Terraform.
+      - name: Terraform Init
+        run: terraform init -backend=false
+        working-directory: terraform
+        # TODO: Ajuste o working-directory caso seu código Terraform esteja em
+        #       um subdiretório diferente de terraform/
+
+      # Verifica se o código Terraform está formatado corretamente.
+      # Falha com código de saída diferente de zero e lista os arquivos com
+      # problemas de formatação, conforme exigido pelo Requisito 6.3.
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: terraform
+
+      # Valida a sintaxe e a consistência interna dos arquivos Terraform.
+      # Não requer credenciais AWS, pois apenas verifica a configuração local.
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: terraform

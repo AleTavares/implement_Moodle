@@ -1,0 +1,31 @@
+name: Docker Lint
+
+on:
+  push:
+    paths:
+      - 'docker/**'
+  pull_request:
+    paths:
+      - 'docker/**'
+
+jobs:
+  docker-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Faz o checkout do repositório para que os arquivos docker/ fiquem disponíveis
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      # Executa o hadolint para análise estática do Dockerfile e verifica boas práticas
+      # TODO: adicione flags --ignore <RULE> aqui se quiser suprimir regras específicas,
+      #       ex: docker run --rm -i hadolint/hadolint hadolint --ignore DL3008 -
+      - name: Lint do Dockerfile com hadolint
+        run: docker run --rm -i hadolint/hadolint < docker/Dockerfile
+
+      # Valida a sintaxe e a integridade do docker-compose.yml sem subir os serviços
+      # TODO: se você tiver um ambiente de testes disponível, pode estender este step
+      #       executando `docker compose -f docker/docker-compose.yml up --build -d`
+      #       seguido de verificações de health e `docker compose down` ao final
+      - name: Validar docker-compose.yml
+        run: docker compose -f docker/docker-compose.yml config --quiet

@@ -1,0 +1,28 @@
+name: Moodle Health Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      moodle_url:
+        # TODO: Após o deploy na AWS, substitua o valor padrão pelo DNS público da sua instância EC2
+        #       (ex: http://ec2-XX-XX-XX-XX.compute-1.amazonaws.com)
+        description: "URL do Moodle a verificar (ex: http://<EC2_DNS>)"
+        required: true
+        default: "http://localhost:8080"
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Faz checkout do repositório para que o script esteja disponível no runner
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      # Garante permissão de execução no script de health check antes de invocá-lo
+      - name: Tornar o script de health check executável
+        run: chmod +x scripts/health-check.sh
+
+      # Executa o health check apontando para a URL informada via input do workflow
+      - name: Executar health check na URL fornecida
+        run: scripts/health-check.sh "${{ github.event.inputs.moodle_url }}"

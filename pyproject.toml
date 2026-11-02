@@ -1,0 +1,30 @@
+# pyproject.toml — Moodle Docker AWS Challenge
+#
+# Project metadata, optional test dependencies and pytest configuration.
+# This repo is a teaching template (not a published package), so the
+# optional-dependencies are grouped under the "test" extra for convenience:
+#     pip install -e ".[test]"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moodle-docker-aws-challenge"
+version = "0.1.0"
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+# Run the property-based test suite:
+#     pip install -e ".[test]"
+test = [
+    "pytest>=7.0",
+    "hypothesis>=6.0",
+    "pyyaml>=6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

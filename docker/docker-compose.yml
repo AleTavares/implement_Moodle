@@ -1,0 +1,86 @@
+# =============================================================================
+# Docker Compose — Ambiente local Moodle 4.x + PostgreSQL 15
+# =============================================================================
+# Pré-requisitos: Docker Engine >= 24 e Docker Compose v2
+# Uso:
+#   cp docker/.env.example docker/.env   # configure as variáveis de ambiente
+#   docker compose -f docker/docker-compose.yml up -d
+# Acesso: http://localhost:8080
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Serviço: db — Banco de dados PostgreSQL 15
+  # TODO: Ajuste a versão da imagem ou parâmetros de memória conforme necessário
+  # ---------------------------------------------------------------------------
+  db:
+    image: postgres:15
+    restart: unless-stopped
+
+    # Carrega as variáveis de ambiente a partir do .env.example
+    # TODO: Em produção, use o arquivo .env (sem valores de exemplo)
+    env_file:
+      - .env.example
+
+    # Healthcheck: aguarda o PostgreSQL aceitar conexões antes de liberar o Moodle
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    volumes:
+      # TODO: Ajuste o caminho do volume ou use um bind mount externo se necessário
+      - db_data:/var/lib/postgresql/data
+
+  # ---------------------------------------------------------------------------
+  # Serviço: moodle — Aplicação Moodle 4.x (build a partir do Dockerfile local)
+  # TODO: Ajuste as variáveis de ambiente ou adicione configurações extras aqui
+  # ---------------------------------------------------------------------------
+  moodle:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    # Aguarda o PostgreSQL estar saudável antes de iniciar o Moodle
+    depends_on:
+      db:
+        condition: service_healthy
+
+    # TODO: Altere a porta do host (8080) caso ela já esteja em uso na sua máquina
+    ports:
+      - "8080:80"
+
+    # Carrega as variáveis de ambiente a partir do .env.example
+    env_file:
+      - .env.example
+
+    # Passa as variáveis de conexão ao banco de dados para o contêiner Moodle
+    environment:
+      - MOODLE_DATABASE_TYPE=pgsql
+      - MOODLE_DATABASE_HOST=${MOODLE_DATABASE_HOST}
+      - MOODLE_DATABASE_PORT_NUMBER=${MOODLE_DATABASE_PORT_NUMBER}
+      - MOODLE_DATABASE_NAME=${MOODLE_DATABASE_NAME}
+      - MOODLE_DATABASE_USER=${MOODLE_DATABASE_USER}
+      - MOODLE_DATABASE_PASSWORD=${MOODLE_DATABASE_PASSWORD}
+      - MOODLE_USERNAME=${MOODLE_USERNAME}
+      - MOODLE_PASSWORD=${MOODLE_PASSWORD}
+      - MOODLE_SITE_NAME=${MOODLE_SITE_NAME}
+
+    volumes:
+      # TODO: Ajuste os caminhos de montagem dos volumes caso necessário
+      - moodle_data:/var/www/html
+      - moodle_www:/var/moodledata
+
+# =============================================================================
+# Volumes nomeados
+# TODO: Para persistência externa, substitua por bind mounts ou drivers de volume
+# =============================================================================
+volumes:
+  db_data:
+  moodle_data:
+  moodle_www:
