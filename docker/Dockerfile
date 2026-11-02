@@ -15,6 +15,10 @@ FROM php:8.1-apache
 # e ferramentas utilitárias do ambiente de produção
 # -----------------------------------------------------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    # pkg-config — necessário para que o configure do PHP encontre as bibliotecas
+    pkg-config \
+    # Dependência de oniguruma para a extensão mbstring (codificação multibyte)
+    libonig-dev \
     # Dependência de libzip para a extensão zip
     libzip-dev \
     # Dependência de libicu para a extensão intl (internacionalização)
@@ -26,6 +30,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     # Dependência de libsodium para a extensão sodium (criptografia Moodle 4.1+)
     libsodium-dev \
+    # Dependência de libxml2 para a extensão simplexml
+    libxml2-dev \
+    # Dependência de libcurl para a extensão curl
+    libcurl4-openssl-dev \
     # Ferramentas de rede e utilitários gerais
     curl \
     unzip \
@@ -121,6 +129,13 @@ RUN curl -fsSL \
 RUN mkdir -p /var/moodledata \
     && chown -R www-data:www-data /var/moodledata \
     && chmod 0770 /var/moodledata
+
+# -----------------------------------------------------------------------------
+# Cria symlink /var/www/moodledata -> /var/moodledata para que o instalador
+# web do Moodle encontre o diretório no caminho padrão sem precisar de
+# permissões de escrita em /var/www
+# -----------------------------------------------------------------------------
+RUN ln -s /var/moodledata /var/www/moodledata
 
 # -----------------------------------------------------------------------------
 # Habilita os módulos Apache necessários para o Moodle
